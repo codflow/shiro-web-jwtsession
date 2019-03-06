@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ink.codflow.shiro.jwtsession</groupId>
   <artifactId>shiro-web-jwtsession</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>shiro-web-jwtsession</name>
   <!-- FIXME change it to the project's website -->
   <url>http://blog.codflow.ink</url>
