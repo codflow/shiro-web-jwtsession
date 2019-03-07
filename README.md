@@ -18,14 +18,14 @@ securityManager.sessionManager=$sessionManager
 
 ```
 
-
-Token will be recieved in Http Header
+Well,Done!  
+Server session is ready to act in a stateless way.Check your browser and you will find a Cookie whose names "JWTTOKEN".
 
 ## Format
 
-Whole Session information will be stored in JWT toke string 
-
-|  JWT key | Session Atrribute type | Value Type |
+Whole Session's information will be stored in JWT toke payload claims. Learn more with [JWT introduction](https://jwt.io/introduction/).  
+JWT claims namespace:
+|  Claim name | Session info         | Value Type |
 |:--------:|:-----------------------|:-----------|
 |jti       |Id                      |Int         |
 |ht        |Host                    |String      |
@@ -34,16 +34,18 @@ Whole Session information will be stored in JWT toke string
 |la        |Last Access Time        |Data        |
 |to        |Timeout                 |Long        |
 |ex        |Expired                 |Boolean     |
-|ats       |Attributes              |+Depend on value type|
+|ats       |Attributes              |*Depend on value type*|
 
 #### +Depend on value type:  
 As normal types include in JSON (String,Int,Data,Long,Boolean), they will be encode in "json" way as following.  
-* "String" is the attribute key
-* "stringcontext" is the attribute value
-* 9 is the inner type mask
+
 ```js
  {"String" :["stringcontent",9]}
 ```
+* "String" is the attribute key
+* "stringcontext" is the attribute value
+* 9 is the inner type mask
+
 Other types and User definded types will be serialized in a proper way and must implement [java.io.Serializable](https://docs.oracle.com/javase/6/docs/api/java/io/Serializable.html) interface.To be compatible ,they be encoded by base64 before JWT encoding.
 
  
@@ -68,7 +70,7 @@ PAYLOAD decoded by Base64
 ```
 
 HEADER decoded by Base64   
-It contains jwt encoding info. Learn more with [JWT introduction](https://jwt.io/introduction/)
+It contains jwt encoding info.
 ```js
 {
   "typ": "JWT",
@@ -138,7 +140,8 @@ WARNNING: Don't set securty content to atrributes without encryption or it be ex
 
 ## Optionally transfer with Http Header  
 
-JWT token is store in Cookie named "JWTTOKEN" by default.For transfer with header with out cookie, set the sessionJwtTokenCookieEnabled to false.JWT token should be send back in header of http request.In addition, SSO store token data in font-end.
+JWT token is store in Cookie named "JWTTOKEN" by default.For transfering in header with out cookie, set the sessionJwtTokenCookieEnabled to false.  
+JWT token should be send back in header of http request. In addition, features like SSO need token stored data at font-end.
 ```ini
 [main]
 
