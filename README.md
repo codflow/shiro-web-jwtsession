@@ -24,19 +24,20 @@ Server session is ready to act in a stateless way.Check your browser and you wil
 ## Format
 
 Whole Session's information will be stored in JWT toke payload claims. Learn more with [JWT introduction](https://jwt.io/introduction/).  
-JWT claims namespace:
-|  Claim name | Session info         | Value Type |
-|:--------:|:-----------------------|:-----------|
-|jti       |Id                      |Int         |
-|ht        |Host                    |String      |
-|st        |Start Timestamp         |Data        |
-|sp        |Stop Timestamp          |Data        |
-|la        |Last Access Time        |Data        |
-|to        |Timeout                 |Long        |
-|ex        |Expired                 |Boolean     |
-|ats       |Attributes              |+Depend on value type|  
+JWT claims namespace:  
 
-#### +Depend on value type:  
+|  Claim name | Session info         | Value Type |  
+|--------|-----------------------|-----------|  
+|jti       |Id                      |Int         |  
+|ht        |Host                    |String      |    
+|st        |Start Timestamp         |Data        |  
+|sp        |Stop Timestamp          |Data        |  
+|la        |Last Access Time        |Data        |  
+|to        |Timeout                 |Long        |  
+|ex        |Expired                 |Boolean     | 
+|ats       |Attributes              |**Depend on value type*|  
+
+#### *Depend on value type:  
 As normal types include in JSON (String,Int,Data,Long,Boolean), they will be encode in "json" way as following.  
 
 ```js
