@@ -1,7 +1,7 @@
 # shiro-web-jwtsession
 
 ## Introduction
-A integration for Session stored in [JWT](https://jwt.io/) support with  [Apache Shiro](http://shiro.apache.org)
+A integration for storage of session in [JWT](https://jwt.io/)  support with  [Apache Shiro](http://shiro.apache.org)
 
 ## Adding and configuring 
 
@@ -21,14 +21,11 @@ securityManager.sessionManager=$sessionManager
 
 Token will be recieved in Http Header
 
-
 ## Format
 
-
-
-
 Whole Session information will be stored in JWT toke string 
-|  Jwt key | Session Atrribute      | Value Type |
+
+|  JWT key | Session Atrribute type | Value Type |
 |:--------:|:-----------------------|:-----------|
 |jti       |Id                      |Int         |
 |ht        |Host                    |String      |
@@ -37,13 +34,13 @@ Whole Session information will be stored in JWT toke string
 |la        |Last Access Time        |Data        |
 |to        |Timeout                 |Long        |
 |ex        |Expired                 |Boolean     |
-|ats       |Attributes              |*Depend on value type|
+|ats       |Attributes              |+Depend on value type|
 
-#### *Depend on value type:  
+#### +Depend on value type:  
 As normal types include in JSON (String,Int,Data,Long,Boolean), they will be encode in "json" way as following.  
 * "String" is the attribute key
 * "stringcontext" is the attribute value
-* 9 is the inner mask
+* 9 is the inner type mask
 ```js
  {"String" :["stringcontent",9]}
 ```
