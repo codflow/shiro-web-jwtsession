@@ -34,7 +34,7 @@ JWT claims namespace:
 |la        |Last Access Time        |Data        |
 |to        |Timeout                 |Long        |
 |ex        |Expired                 |Boolean     |
-|ats       |Attributes              |*Depend on value type*|  
+|ats       |Attributes              |+Depend on value type|  
 
 #### +Depend on value type:  
 As normal types include in JSON (String,Int,Data,Long,Boolean), they will be encode in "json" way as following.  
