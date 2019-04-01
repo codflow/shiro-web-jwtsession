@@ -6,15 +6,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.util.WebUtils;
 
-public class JwtHttpDataWapper {
-    public final static String DEFAULT_JWT_SESSION_COOKIE_NAME = "JwtToken";
-    public final static String DEFAULT_JWT_SESSION_HEADER_NAME = "JwtToken";
+public class JWTHttpDataWapper {
+    public final static String DEFAULT_JWT_SESSION_COOKIE_NAME = "JWTTOKEN";
+    public final static String DEFAULT_JWT_SESSION_HEADER_NAME = "JWTTOKEN";
     private String JwtStrData;
-    private JwtSourceAdaptor source;
+    private JWTSourceAdaptor source;
     // JWTToken stored in Cookie as Default
     private boolean sessionJwtTokenCookieEnabled = true;
 
-    JwtHttpDataWapper(JwtSourceAdaptor source) {
+    JWTHttpDataWapper(JWTSourceAdaptor source) {
         this.source = source;
     }
 

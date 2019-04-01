@@ -1,8 +1,10 @@
 package ink.codflow.shiro.web.jwtsession.mgt.eis;
 
 import java.io.Serializable;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
@@ -17,20 +19,23 @@ import org.apache.shiro.web.util.RequestPairSource;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ink.codflow.shiro.web.jwtsession.mgt.JWTSessionFactory;
 import ink.codflow.shiro.web.jwtsession.util.ThreadDataUtil;
 
-public class DefaultWebJwtSessionManager extends DefaultSessionManager implements WebSessionManager {
-    private static final Logger log = LoggerFactory.getLogger(DefaultWebJwtSessionManager.class);
+public class DefaultWebJWTSessionManager extends DefaultSessionManager implements WebSessionManager {
+    private static final Logger log = LoggerFactory.getLogger(DefaultWebJWTSessionManager.class);
 
     private boolean sessionJwtTokenCookieEnabled;
     private boolean sessionIdUrlRewritingEnabled;
-
-    public DefaultWebJwtSessionManager() {
+   
+    public DefaultWebJWTSessionManager() {
         try {
-            super.sessionDAO = new JwtMultipleDAO();
+            super.sessionDAO = new JWTSessionDAO();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        super.setSessionFactory( new JWTSessionFactory());
         this.sessionJwtTokenCookieEnabled = true;
         this.sessionIdUrlRewritingEnabled = false;
     }
@@ -79,7 +84,7 @@ public class DefaultWebJwtSessionManager extends DefaultSessionManager implement
         setDataSource(sessionKey);
         setUrlRewriteFlag(sessionKey);
         if (WebUtils.isHttp(sessionKey)) {
-            JwtSourceAdaptor source = new JwtSourceAdaptor((RequestPairSource) sessionKey);
+            JWTSourceAdaptor source = new JWTSourceAdaptor((RequestPairSource) sessionKey);
             isTokenExists = source.readData() != null;
             isTokenExists = true;
         }
@@ -92,7 +97,7 @@ public class DefaultWebJwtSessionManager extends DefaultSessionManager implement
                     + "session could not be found.", sessionKey);
             return null;
         }
-        Session s = retrieveSessionFromDataSource(JwtHttpDataWapper.DEFAULT_JWT_SESSION_COOKIE_NAME);
+        Session s = retrieveSessionFromDataSource(JWTHttpDataWapper.DEFAULT_JWT_SESSION_COOKIE_NAME);
         if (s == null) {
             // session ID was provided, meaning one is expected to be found, but we couldn't
             // find one:

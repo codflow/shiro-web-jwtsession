@@ -1,4 +1,4 @@
-package ink.codflow.shiro.jwtsession.io;
+package ink.codflow.shiro.jwtsession.serialize;
 
 import java.io.Serializable;
 

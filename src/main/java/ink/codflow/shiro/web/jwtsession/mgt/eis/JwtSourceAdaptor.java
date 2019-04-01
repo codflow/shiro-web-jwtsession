@@ -3,22 +3,22 @@ package ink.codflow.shiro.web.jwtsession.mgt.eis;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import org.apache.shiro.web.util.RequestPairSource;
-public class JwtSourceAdaptor implements RequestPairSource {
+public class JWTSourceAdaptor implements RequestPairSource {
 
     private ServletRequest request;
     private ServletResponse response;
-    private JwtHttpDataWapper wapper;
+    private JWTHttpDataWapper wapper;
 
-    public JwtSourceAdaptor(RequestPairSource source) {
+    public JWTSourceAdaptor(RequestPairSource source) {
         this.request = source.getServletRequest();
         this.response = source.getServletResponse();
-        this.wapper = new JwtHttpDataWapper(this);
+        this.wapper = new JWTHttpDataWapper(this);
     }
 
-    public JwtSourceAdaptor(ServletRequest request, ServletResponse response) {
+    public JWTSourceAdaptor(ServletRequest request, ServletResponse response) {
         this.request = request;
         this.response = response;
-        this.wapper = new JwtHttpDataWapper(this);
+        this.wapper = new JWTHttpDataWapper(this);
     }
     @Override
     public ServletRequest getServletRequest() {

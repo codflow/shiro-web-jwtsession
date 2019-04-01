@@ -1,20 +1,18 @@
-package ink.codflow.shiro.jwtsession.io;
+package ink.codflow.shiro.jwtsession.serialize;
 
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import ink.codflow.shiro.web.jwtsession.io.JdkObjStrSerializerWapper;
-import ink.codflow.shiro.web.jwtsession.io.ObjStrSerializer;
+import ink.codflow.shiro.web.jwtsession.serialize.ObjStrSerializer;
+import ink.codflow.shiro.web.jwtsession.serialize.ObjStrUrlSafeSerializer;
 
 public class JdkObjStrSerializerTest {
     String str;
 
     @Test
     public void testObj2StrSerialize() {
-        ObjStrSerializer serializer = new JdkObjStrSerializerWapper();
+        ObjStrSerializer serializer = new ObjStrUrlSafeSerializer();
         String string = serializer.obj2StrSerialize(new Man());
         this.str = string;
         
@@ -23,7 +21,7 @@ public class JdkObjStrSerializerTest {
     @Test
     public void testStr2ObjDeserialize() {
 
-        ObjStrSerializer serializer = new JdkObjStrSerializerWapper();
+        ObjStrSerializer serializer = new ObjStrUrlSafeSerializer();
         String string = serializer.obj2StrSerialize(new Man());
         Object result = serializer.str2ObjDeserialize(str);
         
