@@ -177,6 +177,7 @@ public class SessionJWTConvertor {
         return keyObject;
     }
 
+    @SuppressWarnings("deprecation")
     private Object resolve2Obj(Object objRaw, int objType) {
 
         if (ValueObjectType.OBJECT_TYPE_STRING.typeMask == objType)
@@ -190,6 +191,7 @@ public class SessionJWTConvertor {
         if (ValueObjectType.OBJECT_TYPE_DOUBLE.typeMask == objType)
             return objRaw instanceof String ? Double.valueOf((String) objRaw) : (Double) (objRaw);
         if (ValueObjectType.OBJECT_TYPE_DATE.typeMask == objType)
+            //Date.parse((String) objRaw) date recover from Date.toString()
             return objRaw instanceof String ? Date.parse((String) objRaw) : new Date((Long) objRaw);
         return serializer.str2ObjDeserialize((String) objRaw);
     }
