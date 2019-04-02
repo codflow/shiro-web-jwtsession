@@ -22,6 +22,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 public class SessionJWTConvertor {
 
+    
     private static final String ID_KEY = "jti";
     private static final String START_TIMESTAMP_KEY = "st";
     private static final String STOP_TIMESTAMP_KEY = "sp";
@@ -37,13 +38,14 @@ public class SessionJWTConvertor {
     protected static final byte ATTRIBUTES_KEY_RECOVER_MASK = 7;
     // private static final byte ATTRIBUTES_VALUE_RECOVER_MASK = 56;
 
-    private String salt = "7dh&uP";
+    
     private Algorithm algorithm;
     protected ObjStrSerializer<Object> serializer;
     private JWTVerifier verifier;
     private static final Logger log = LoggerFactory.getLogger(SessionJWTConvertor.class);
 
     public SessionJWTConvertor() {
+        String salt = "7dh&uP";
         String JWT_SECRET = "mdefaultsecret";
         String secret_Key = salt + JWT_SECRET;
         try {

@@ -1,10 +1,11 @@
 package ink.codflow.shiro.web.jwtsession.mgt.eis;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
@@ -19,8 +20,7 @@ import ink.codflow.shiro.web.jwtsession.serialize.ObjBytesSerializer;
 
 public class PartialCacheJWTSessionDAO extends JWTSessionDAO implements CacheManagerAware {
 
-    private  boolean cacheSessionIdOnly = true;
-    private static final String prefixT = "_ctol_";
+    private boolean cacheSessionIdOnly = true;
     ObjBytesSerializer<Object> serializer;
 
     CacheManager cacheManager;
@@ -81,14 +81,8 @@ public class PartialCacheJWTSessionDAO extends JWTSessionDAO implements CacheMan
             return null;
         }
         if (attributesMap.size() > 1) {
-            for (Entry<Object, Object> entry : attributesMap.entrySet()) {
-//                if (!entry.getKey().equals(sessionId)) {
-//                    s.setAttribute(entry.getKey(), entry.getValue());
-//                }
-                s.setAttributes(attributesMap);
-            }
+            s.setAttributes(attributesMap);
         }
-        // s.setAttributes(attributesMap);
         return s;
     }
 
@@ -157,7 +151,7 @@ public class PartialCacheJWTSessionDAO extends JWTSessionDAO implements CacheMan
     private Session doCacheSessionAttributes(Session session) {
 
         Map<Object, Object> map = extractSessionAttributes(session);
-        if (map ==null) {
+        if (map == null) {
             map = new HashMap<Object, Object>();
         }
         Serializable sessionId = session.getId();
@@ -199,10 +193,39 @@ public class PartialCacheJWTSessionDAO extends JWTSessionDAO implements CacheMan
 
     }
 
+    public int validateCache(long sessionTimeout) {
+        int invalidCount = 0;
+        for (Serializable key : getCachedKeys()) {
+            Map<Object, Object> map = getCachedContain(key);
+            if (map != null && map.containsKey(key)) {
+                Integer createtimestamp = (Integer) map.get(key);
+                if (createtimestamp != null
+                        && (createtimestamp + sessionTimeout < System.currentTimeMillis())
+                        && uncache(key)) {
+                    
+                    invalidCount++;
+                }
+
+            }
+        }
+        return invalidCount;
+    }
+
     private Map<Object, Object> getCachedContain(Serializable sessionId) {
 
         Map<Object, Object> map = getActivePartialSessionsCacheLazy().get(sessionId);
         return map;
+    }
+
+    protected Set<Serializable> getCachedKeys() {
+        return cache.keys();
+    }
+
+    protected boolean uncache(Serializable id) {
+        if (id != null && cache.remove(id) != null) {
+            return true;
+        }
+        return false;
     }
 
     protected void uncache(Session session) {

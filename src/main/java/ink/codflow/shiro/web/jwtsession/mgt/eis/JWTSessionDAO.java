@@ -26,57 +26,30 @@ import ink.codflow.shiro.web.jwtsession.util.ThreadDataUtil;
 public class JWTSessionDAO extends AbstractSessionDAO {
     @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(JWTSessionDAO.class);
+    
+    private static final String DRFAULTSECRETKEY = "defaultsecret";
     private SessionFactory sessionFactory;
     private ObjStrSerializer<Object> serializer;
     private SessionJWTConvertor convertor;
-    private String JWT_SecretKey = "defaultsecret";
-    private Algorithm algorithm;
     
-    public ObjStrSerializer<Object> getSerializer() {
-        if (serializer == null) {
-            this.serializer = new ObjStrUrlSafeSerializer();
-        }
-        return serializer;
-    }
+    
+    private String JWT_SecretKey ;
+    private String salt = "d@gs3";
+    private Algorithm algorithm;
 
-    public void setSerializer(ObjStrSerializer<Object> serializer) {
-        this.serializer = serializer;
-    }
-
-    public String getJWT_SecretKey() {
-        return JWT_SecretKey;
-    }
-
-    public void setJWT_SecretKey(String jWT_SecretKey) {
-        JWT_SecretKey = jWT_SecretKey;
-    }
-
-    public SessionJWTConvertor getConvertorLazy() {
-        if (convertor != null) {
-            return convertor;
-        }
-        return new SessionJWTSmoothConvertor(getSerializer(),getAlgorithm());
-    }
-
-    public void setConvertor(SessionJWTConvertor convertor) {
-        
-        this.convertor = convertor;
-    }
-
-    public Algorithm getAlgorithm()  {
+    
+    public Algorithm getAlgorithm() {
         if (algorithm != null) {
             return algorithm;
         }
         try {
-            return  Algorithm.HMAC256(getJWT_SecretKey());
+            return Algorithm.HMAC256(getJWT_SecretKey() + getSalt());
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        String msg = "JWT Algorithm  Error JWT_SecretKey: " +getJWT_SecretKey();
+        String msg = "JWT Algorithm  Error JWT_SecretKey: " + getJWT_SecretKey();
         throw new AlgorithmMismatchException(msg);
     }
 
@@ -84,9 +57,9 @@ public class JWTSessionDAO extends AbstractSessionDAO {
         this.algorithm = algorithm;
     }
 
-    public JWTSessionDAO()   {
+    public JWTSessionDAO() {
         this.sessionFactory = new JWTSessionFactory();
-        
+
     }
 
     public JWTSessionDAO(boolean isSessionJwtTokenCookieEnabled)
@@ -102,7 +75,7 @@ public class JWTSessionDAO extends AbstractSessionDAO {
     protected void doUpdate(Session session) {
         storeSession(session.getId(), session);
     }
-    
+
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
@@ -145,7 +118,6 @@ public class JWTSessionDAO extends AbstractSessionDAO {
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
-
         return read((SimpleSession) sessionFactory.createSession(null));
     }
 
@@ -159,33 +131,75 @@ public class JWTSessionDAO extends AbstractSessionDAO {
         store(id, (SimpleSession) session);
         return session;
     }
-    
+
     private SimpleSession read(SimpleSession plainSession) {
         String tokenStr = ThreadDataUtil.getDataSourceFromThread().readData();
         return getConvertorLazy().tokenStr2Session(tokenStr, plainSession);
     }
+
+    @SuppressWarnings("unused")
     private SimpleSession readSessionLazyAttribute(SimpleSession plainSession) {
         String tokenStr = ThreadDataUtil.getDataSourceFromThread().readData();
         return getConvertorLazy().tokenStr2Session(tokenStr, plainSession);
     }
-    
+
     private void store(Serializable id, SimpleSession session) {
         store(session);
     }
-    
+
     private void store(SimpleSession session) {
         if (session instanceof SimpleSession) {
             String tokenStr = getConvertorLazy().session2TokenStr(session);
             ThreadDataUtil.getDataSourceFromThread().storeData(tokenStr);
         }
     }
-    
-    
+
     private void remove(Session session) {
         ThreadDataUtil.getDataSourceFromThread().deleteData();
-
     }
-    
-    
-    
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public ObjStrSerializer<Object> getSerializer() {
+        if (serializer == null) {
+            this.serializer = new ObjStrUrlSafeSerializer();
+        }
+        return serializer;
+    }
+
+    public void setSerializer(ObjStrSerializer<Object> serializer) {
+        this.serializer = serializer;
+    }
+
+    public String getJWT_SecretKey() {
+        if (JWT_SecretKey ==null) {
+            JWT_SecretKey = DRFAULTSECRETKEY;
+            String msg = "Encode with default algorithm :" + algorithm.getName() + "and key:" + DRFAULTSECRETKEY
+                    + "may cause security risks!";
+            log.warn(msg);
+        }
+        return JWT_SecretKey;
+    }
+
+    public void setJWT_SecretKey(String jWT_SecretKey) {
+        JWT_SecretKey = jWT_SecretKey;
+    }
+
+    public SessionJWTConvertor getConvertorLazy() {
+        if (convertor != null) {
+            return convertor;
+        }
+        return new SessionJWTSmoothConvertor(getSerializer(), getAlgorithm());
+    }
+
+    public void setConvertor(SessionJWTConvertor convertor) {
+
+        this.convertor = convertor;
+    }
 }

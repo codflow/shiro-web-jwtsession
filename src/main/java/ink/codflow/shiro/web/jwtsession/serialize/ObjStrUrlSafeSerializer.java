@@ -3,7 +3,6 @@ package ink.codflow.shiro.web.jwtsession.serialize;
 import java.io.Serializable;
 
 import org.apache.shiro.codec.Base64;
-import org.apache.shiro.io.DefaultSerializer;
 import org.apache.shiro.io.SerializationException;
 
 public class ObjStrUrlSafeSerializer implements ObjStrSerializer<Object> {
