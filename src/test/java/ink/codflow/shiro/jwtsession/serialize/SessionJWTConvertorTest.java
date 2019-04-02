@@ -1,4 +1,4 @@
-package ink.codflow.shiro.jwtsession.mgt.eis;
+package ink.codflow.shiro.jwtsession.serialize;
 
 import static org.junit.Assert.assertTrue;
 
@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import org.apache.shiro.session.mgt.SimpleSession;
 import org.junit.Test;
-import ink.codflow.shiro.jwtsession.serialize.Man;
+
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSession;
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSessionFactory;
 import ink.codflow.shiro.web.jwtsession.serialize.SessionJWTConvertor;

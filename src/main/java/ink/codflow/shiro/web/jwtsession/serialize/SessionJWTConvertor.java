@@ -162,29 +162,6 @@ public class SessionJWTConvertor {
         }
         return session;
 
-//        Map<String, Object> valueMap = value.asMap();
-//
-//        for (String atrrbuteKey : valueMap.keySet()) {
-//            Object keyObject = null;    
-//            Object valueObject;
-//            
-//            
-//            @SuppressWarnings("unchecked")
-//            List<Object> list = (List<Object>) valueMap.get(atrrbuteKey);
-//
-//            byte typeMask = ((Integer) list.get(ATTRIBUTE_MASK_POSITION)).byteValue();
-//            
-//            Object valueRaw = list.get(ATTRIBUTE_VALUE_POSITION);
-//            int valueType = (typeMask >> 3) & ATTRIBUTES_KEY_RECOVER_MASK;
-//            valueObject = resolve2Obj(valueRaw, valueType);
-//            if (valueObject != null) {
-//                int keyType = typeMask & ATTRIBUTES_KEY_RECOVER_MASK;
-//                keyObject = resolve2Obj(atrrbuteKey, keyType);
-//            }
-//            
-//            session.setAttribute(keyObject, valueObject);
-//        }
-
     }
 
     protected Object recoverValueObject(List<Object> valueList, byte typeMask) {
@@ -217,73 +194,6 @@ public class SessionJWTConvertor {
         return serializer.str2ObjDeserialize((String) objRaw);
     }
 
-//    private Builder solveSessionAttributes(Builder jwtBuilder, SimpleSession session) {
-//        Map<Object, Object> atrributes = session.getAttributes();
-//        Map<Object, List<Object>> jwtAttributesMap = new LinkedHashMap<Object, List<Object>>();
-//
-//        if (atrributes != null) {
-//            Set<Object> attrKeySet = atrributes.keySet();
-//            List<Object> valueList;
-//            // Record the types of key and value
-//            byte typeMask;
-//            Object value = null;
-//            String attrKeyStr = null;
-//            String valueStr = null;
-//            for (Object attrKey : attrKeySet) {
-//                typeMask = 0;
-//                valueList = new ArrayList<Object>();
-//                value = atrributes.get(attrKey);
-//                if (value == null) {
-//                    continue;
-//                }
-//                attrKeyStr = ((typeMask |= isSimpleType(attrKey)) > 0) ? attrKey.toString()
-//                        : serializer.obj2StrSerialize(attrKey);
-//                if (value != null) {
-//                    if ((typeMask |= (isSimpleType(value) << 3)) > 0) {
-//                        valueList.add(value);
-//                    } else {
-//                        valueStr = serializer.obj2StrSerialize(value);
-//                        valueList.add(valueStr);
-//                    }
-//                    valueList.add(typeMask);
-//                    jwtAttributesMap.put(attrKeyStr, valueList);
-//                }
-//
-//            }
-//            UnCheckedPutPlainObject(jwtBuilder, ATTRIBUTES_KEY, jwtAttributesMap);
-//
-//        }
-//
-//        return jwtBuilder;
-//    }
-//
-//    private static Builder solveSessionState(Builder jwtBuilder, SimpleSession session) {
-//        if (session.getId() != null) {
-//            jwtBuilder.withJWTId(session.getId().toString());
-//        }
-//
-//        if (session.getStartTimestamp() != null) {
-//            jwtBuilder.withClaim(START_TIMESTAMP_KEY, session.getStartTimestamp());
-//        }
-//        if (session.getStopTimestamp() != null) {
-//            jwtBuilder.withClaim(STOP_TIMESTAMP_KEY, session.getStopTimestamp());
-//        }
-//        if (session.getLastAccessTime() != null) {
-//            jwtBuilder.withClaim(LAST_ACCESS_TIME_KEY, session.getLastAccessTime());
-//        }
-//        if (session.getTimeout() > 0) {
-//            jwtBuilder.withClaim(TIMEOUT_KEY, session.getTimeout());
-//        }
-//        if (session.isExpired()) {
-//            jwtBuilder.withClaim(EXPIRED_KEY, session.isExpired());
-//        }
-//        if (session.getHost() != null) {
-//            jwtBuilder.withClaim(HOST_KEY, session.getHost());
-//        }
-//
-//        return jwtBuilder;
-//
-//    }
 
     protected static int isSimpleType(Object object) {
 
@@ -309,20 +219,6 @@ public class SessionJWTConvertor {
 
     }
 
-//    private static void UnCheckedPutPlainObject(Builder builder, String key, Object value) {
-//        Class<Builder> clazz = Builder.class;
-//        Method method;
-//        try {
-//            method = clazz.getDeclaredMethod("addClaim", String.class, Object.class);
-//            method.setAccessible(true);
-//            method.invoke(builder, key, value);
-//
-//        } catch (Exception e) {
-//            String msg = "JWT reflect method fail";
-//            log.error(msg);
-//            e.printStackTrace();
-//        }
-//    }
 
     public DecodedJWT createJWT(String tokenStr) {
         if (this.verifier == null) {

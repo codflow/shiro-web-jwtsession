@@ -12,7 +12,8 @@
 
 /bin/
 /.vscode/
-/.settings/
+#/.settings/
+#.settings/
 /target/
 # Package Files #
 *.jar

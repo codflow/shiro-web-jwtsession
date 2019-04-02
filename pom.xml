@@ -14,7 +14,7 @@
 	<packaging>jar</packaging>
 	<name>shiro-web-jwtsession</name>
 	<!-- FIXME change it to the project's website -->
-	<url>http://blog.codflow.ink</url>
+	<url>github.com/codflow/shiro-web-jwtsession</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
@@ -44,6 +44,16 @@
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
 			<version>3.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 	<build>
