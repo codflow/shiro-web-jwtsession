@@ -7,18 +7,18 @@ public class JWTSourceAdaptor implements RequestPairSource {
 
     private ServletRequest request;
     private ServletResponse response;
-    private JWTHttpDataWapper wapper;
+    private JWTHttpDataHandler handler;
 
     public JWTSourceAdaptor(RequestPairSource source) {
         this.request = source.getServletRequest();
         this.response = source.getServletResponse();
-        this.wapper = new JWTHttpDataWapper(this);
+        this.handler = new JWTHttpDataHandler(this);
     }
 
     public JWTSourceAdaptor(ServletRequest request, ServletResponse response) {
         this.request = request;
         this.response = response;
-        this.wapper = new JWTHttpDataWapper(this);
+        this.handler = new JWTHttpDataHandler(this);
     }
     @Override
     public ServletRequest getServletRequest() {
@@ -29,25 +29,25 @@ public class JWTSourceAdaptor implements RequestPairSource {
         return response;
     }
     public String readData() {
-        return wapper.readData();
+        return handler.readData();
     }
     public boolean storeData(String str) {
-        return wapper.storeData(str);
+        return handler.storeData(str);
     }
     
     public boolean deleteData() {
-        return wapper.deleteData();
+        return handler.deleteData();
     }
     
     public boolean isRequestSourceEmpty() {
-        return wapper.isRequestSourceEmpty();
+        return handler.isRequestSourceEmpty();
     }
     
     public boolean isSessionJwtTokenCookieEnabled() {
-        return wapper.isSessionJwtTokenCookieEnabled();
+        return handler.isSessionJwtTokenCookieEnabled();
     }
     public void setSessionJwtTokenCookieEnabled(boolean sessionJwtTokenCookieEnabled) {
-        wapper.setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled);
+        handler.setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled);
     }
     
 }

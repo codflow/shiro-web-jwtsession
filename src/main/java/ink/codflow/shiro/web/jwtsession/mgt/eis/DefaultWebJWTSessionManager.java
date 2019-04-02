@@ -1,10 +1,8 @@
 package ink.codflow.shiro.web.jwtsession.mgt.eis;
 
 import java.io.Serializable;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
@@ -19,39 +17,27 @@ import org.apache.shiro.web.util.RequestPairSource;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSessionFactory;
 import ink.codflow.shiro.web.jwtsession.util.ThreadDataUtil;
 
 public class DefaultWebJWTSessionManager extends DefaultSessionManager implements WebSessionManager {
     private static final Logger log = LoggerFactory.getLogger(DefaultWebJWTSessionManager.class);
-
+    private static final boolean ENABLEJWTSESSIONCOOKIE = true;
+    private static final boolean DISABLEURLREWRITE = false;
     private boolean sessionJwtTokenCookieEnabled;
     private boolean sessionIdUrlRewritingEnabled;
-   
+
     public DefaultWebJWTSessionManager() {
         try {
             super.sessionDAO = new JWTSessionDAO();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        super.setSessionFactory( new JWTSessionFactory());
-        this.sessionJwtTokenCookieEnabled = true;
-        this.sessionIdUrlRewritingEnabled = false;
+        super.setSessionFactory(new JWTSessionFactory());
+        this.sessionJwtTokenCookieEnabled = ENABLEJWTSESSIONCOOKIE;
+        this.sessionIdUrlRewritingEnabled = DISABLEURLREWRITE;
     }
 
-/*    @Override
-    public Serializable getSessionId(SessionKey key) {
-        Serializable id = super.getSessionId(key);
-        if (id == null && WebUtils.isWeb(key)) {
-            ServletRequest request = WebUtils.getRequest(key);
-            ServletResponse response = WebUtils.getResponse(key);
-            id = getSessionId(request, response);
-        }
-        return id;
-    }
-    
-*/
 
 
     @Override
@@ -97,7 +83,7 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
                     + "session could not be found.", sessionKey);
             return null;
         }
-        Session s = retrieveSessionFromDataSource(JWTHttpDataWapper.DEFAULT_JWT_SESSION_COOKIE_NAME);
+        Session s = retrieveSessionFromDataSource(JWTHttpDataHandler.DEFAULT_JWT_SESSION_COOKIE_NAME);
         if (s == null) {
             // session ID was provided, meaning one is expected to be found, but we couldn't
             // find one:
@@ -111,9 +97,10 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
         Serializable id = super.getSessionId(key);
         if (id == null && WebUtils.isWeb(key)) {
             ServletRequest request = WebUtils.getRequest(key);
-         // always set rewrite flag - SHIRO-361
-            request.setAttribute(ShiroHttpServletRequest.SESSION_ID_URL_REWRITING_ENABLED,isSessionIdUrlRewritingEnabled());
-        }        
+            // always set rewrite flag - SHIRO-361
+            request.setAttribute(ShiroHttpServletRequest.SESSION_ID_URL_REWRITING_ENABLED,
+                    isSessionIdUrlRewritingEnabled());
+        }
     }
 
     private void setDataSource(Object pairSource) {
@@ -128,7 +115,6 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
         return sessionIdUrlRewritingEnabled;
     }
 
-    @SuppressWarnings({"UnusedDeclaration"})
     public void setSessionIdUrlRewritingEnabled(boolean sessionIdUrlRewritingEnabled) {
         this.sessionIdUrlRewritingEnabled = sessionIdUrlRewritingEnabled;
     }
@@ -142,4 +128,32 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
     public boolean isServletContainerSessions() {
         return false;
     }
+
+    protected void validatePartialSessions() {
+        if (log.isInfoEnabled()) {
+            log.info("Validating all active sessions...");
+        }
+        if (sessionDAO instanceof PartialCacheJWTSessionDAO) {
+            long sessionTimeout = getGlobalSessionTimeout();
+            int invalidCount = ((PartialCacheJWTSessionDAO)sessionDAO).validateCache(sessionTimeout);
+            
+            if (log.isInfoEnabled()) {
+                String msg = "Finished session validation.";
+                if (invalidCount > 0) {
+                    msg += "  [" + invalidCount + "] sessions were stopped.";
+                } else {
+                    msg += "  No sessions were stopped.";
+                }
+                log.info(msg);
+            }
+
+        }
+
+    }
+
+    @Override
+    public void validateSessions() {
+        validatePartialSessions();
+    }
+
 }

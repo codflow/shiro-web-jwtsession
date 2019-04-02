@@ -8,7 +8,6 @@ public class JWTSessionFactory implements SessionFactory {
 
     
     public JWTSessionFactory() {
-        // TODO Auto-generated constructor stub
     }
     @Override
     public Session createSession(SessionContext initData) {

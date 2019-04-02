@@ -36,8 +36,6 @@ public class JWTSession extends SimpleSession implements Cloneable {
             super.setAttribute(attributePair.getKey(), valueObject);
             attributesRawMap.remove(attributePair.getKey());
         }
-        ;
-
     }
 
     public Map<Object, UnSafeRawList> getAttributesRawMap() {
@@ -92,13 +90,6 @@ public class JWTSession extends SimpleSession implements Cloneable {
         }
         return super.getAttributes();
     }
-
-//    public void setAttribute(Serializable key, Serializable value) {
-//        if (attributesRawMap.containsKey(key)) {
-//            attributesRawMap.remove(key);
-//        }
-//        super.setAttribute(key, value);
-//    }
 
     @Override
     public void setAttribute(Object key, Object value) {
