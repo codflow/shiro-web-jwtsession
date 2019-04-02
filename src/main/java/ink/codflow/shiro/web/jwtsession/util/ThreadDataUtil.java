@@ -9,7 +9,7 @@ import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.util.RequestPairSource;
 import org.apache.shiro.web.util.WebUtils;
 
-import ink.codflow.shiro.web.jwtsession.mgt.eis.JwtSourceAdaptor;
+import ink.codflow.shiro.web.jwtsession.mgt.eis.JWTSourceAdaptor;
 
 public class ThreadDataUtil {
 
@@ -20,31 +20,32 @@ public class ThreadDataUtil {
             setDataSourceToThread((RequestPairSource) source);
         }
     }
+
     public static void setDataSourceToThread(Object context) {
         if (WebUtils.isHttp(context)) {
             setDataSourceToThread((RequestPairSource) context);
         }
-        
+
     }
 
     public static void setDataSourceToThread(RequestPairSource source) {
         if (WebUtils.isHttp(source)) {
-            JwtSourceAdaptor wapperredSource = new JwtSourceAdaptor(source);
+            JWTSourceAdaptor wapperredSource = new JWTSourceAdaptor(source);
             ThreadContext.put(JWTDATA_THREAD_SOURCE, wapperredSource);
         }
     }
 
-    public static JwtSourceAdaptor getDataSourceFromThread() {
+    public static JWTSourceAdaptor getDataSourceFromThread() {
         RequestPairSource source = (RequestPairSource) ThreadContext.get(JWTDATA_THREAD_SOURCE);
         if (source ==null && WebUtils.isHttp(SecurityUtils.getSubject())) {
             HttpServletRequest request = WebUtils.getHttpRequest(SecurityUtils.getSubject());
             HttpServletResponse response = WebUtils.getHttpResponse(SecurityUtils.getSubject());
-            JwtSourceAdaptor aNewSource = new JwtSourceAdaptor(request,response);
+            JWTSourceAdaptor aNewSource = new JWTSourceAdaptor(request, response);
             setDataSourceToThread(aNewSource);
             return aNewSource;
         }
         
-        return (JwtSourceAdaptor)source;
+        return (JWTSourceAdaptor)source;
     }
     public static boolean isRequestSourceEmpty() {
 

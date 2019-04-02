@@ -1,4 +1,4 @@
-package ink.codflow.shiro.web.jwtsession.mgt.eis;
+package ink.codflow.shiro.web.jwtsession.serialize;
 
 import java.util.Date;
 

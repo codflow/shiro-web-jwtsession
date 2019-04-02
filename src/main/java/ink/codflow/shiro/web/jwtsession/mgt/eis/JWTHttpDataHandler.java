@@ -6,20 +6,42 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.util.WebUtils;
 
-public class JwtHttpDataWapper {
-    public final static String DEFAULT_JWT_SESSION_COOKIE_NAME = "JwtToken";
-    public final static String DEFAULT_JWT_SESSION_HEADER_NAME = "JwtToken";
+public class JWTHttpDataHandler implements JWTDataHandler<String> {
+    public final static String DEFAULT_JWT_SESSION_COOKIE_NAME = "JWTTOKEN";
+    public final static String DEFAULT_JWT_SESSION_HEADER_NAME = "JWTTOKEN";
     private String JwtStrData;
-    private JwtSourceAdaptor source;
+    private JWTSourceAdaptor source;
     // JWTToken stored in Cookie as Default
     private boolean sessionJwtTokenCookieEnabled = true;
 
-    JwtHttpDataWapper(JwtSourceAdaptor source) {
+    JWTHttpDataHandler(JWTSourceAdaptor source) {
         this.source = source;
     }
 
+    @Override
     public String readData() {
         return JwtStrData != null ? readCurrentData() : readReferencedData();
+    }
+
+    @Override
+    public boolean storeData(String str) {
+        this.JwtStrData = str;
+        return isSessionJwtTokenCookieEnabled() ? store2Cookie(str) : store2Header(str);
+    }
+
+    @Override
+    public boolean deleteData() {
+        this.JwtStrData = null;
+        SimpleCookie cookie = new SimpleCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
+
+        if (WebUtils.isHttp(source)) {
+            HttpServletRequest request = WebUtils.getHttpRequest(source);
+            HttpServletResponse response = WebUtils.getHttpResponse(source);
+            cookie.removeFrom(request, response);
+            return true;
+        }
+        return false;
+
     }
 
     public String readReferencedData() {
@@ -29,11 +51,6 @@ public class JwtHttpDataWapper {
     public String readReferencedCookieData() {
         Cookie cookie = getCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
         return cookie != null ? cookie.getValue() : null;
-    }
-
-    public boolean storeData(String str) {
-        this.JwtStrData = str;
-        return isSessionJwtTokenCookieEnabled() ? store2Cookie(str) : store2Header(str);
     }
 
     private boolean store2Header(String value) {
@@ -82,7 +99,7 @@ public class JwtHttpDataWapper {
     protected boolean store2Cookie(String value) {
         SimpleCookie cookie = new SimpleCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
         cookie.setHttpOnly(true); // more secure, protects against XSS attacks
-        
+
         cookie.setValue(value);
         if (WebUtils.isHttp(source)) {
             HttpServletRequest request = WebUtils.getHttpRequest(source);
@@ -91,20 +108,6 @@ public class JwtHttpDataWapper {
             return true;
         }
         return false;
-    }
-
-    public boolean deleteData() {
-        this.JwtStrData = null;
-        SimpleCookie cookie = new SimpleCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
-
-        if (WebUtils.isHttp(source)) {
-            HttpServletRequest request = WebUtils.getHttpRequest(source);
-            HttpServletResponse response = WebUtils.getHttpResponse(source);
-            cookie.removeFrom(request, response);
-            return true;
-        }
-        return false;
-
     }
 
     public boolean isSessionJwtTokenCookieEnabled() {

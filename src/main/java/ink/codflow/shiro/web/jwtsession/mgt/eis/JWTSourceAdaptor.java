@@ -3,22 +3,22 @@ package ink.codflow.shiro.web.jwtsession.mgt.eis;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import org.apache.shiro.web.util.RequestPairSource;
-public class JwtSourceAdaptor implements RequestPairSource {
+public class JWTSourceAdaptor implements RequestPairSource {
 
     private ServletRequest request;
     private ServletResponse response;
-    private JwtHttpDataWapper wapper;
+    private JWTHttpDataHandler handler;
 
-    public JwtSourceAdaptor(RequestPairSource source) {
+    public JWTSourceAdaptor(RequestPairSource source) {
         this.request = source.getServletRequest();
         this.response = source.getServletResponse();
-        this.wapper = new JwtHttpDataWapper(this);
+        this.handler = new JWTHttpDataHandler(this);
     }
 
-    public JwtSourceAdaptor(ServletRequest request, ServletResponse response) {
+    public JWTSourceAdaptor(ServletRequest request, ServletResponse response) {
         this.request = request;
         this.response = response;
-        this.wapper = new JwtHttpDataWapper(this);
+        this.handler = new JWTHttpDataHandler(this);
     }
     @Override
     public ServletRequest getServletRequest() {
@@ -29,25 +29,25 @@ public class JwtSourceAdaptor implements RequestPairSource {
         return response;
     }
     public String readData() {
-        return wapper.readData();
+        return handler.readData();
     }
     public boolean storeData(String str) {
-        return wapper.storeData(str);
+        return handler.storeData(str);
     }
     
     public boolean deleteData() {
-        return wapper.deleteData();
+        return handler.deleteData();
     }
     
     public boolean isRequestSourceEmpty() {
-        return wapper.isRequestSourceEmpty();
+        return handler.isRequestSourceEmpty();
     }
     
     public boolean isSessionJwtTokenCookieEnabled() {
-        return wapper.isSessionJwtTokenCookieEnabled();
+        return handler.isSessionJwtTokenCookieEnabled();
     }
     public void setSessionJwtTokenCookieEnabled(boolean sessionJwtTokenCookieEnabled) {
-        wapper.setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled);
+        handler.setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled);
     }
     
 }

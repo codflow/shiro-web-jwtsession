@@ -111,7 +111,7 @@ PAYLOAD decoded by Base64
 * Object is serialized as String
 * String and Number is in the "json" way  
    
-WARNNING: Don't set securty content to atrributes without encryption or it be exposed to font-end.
+WARNNING: Don't set confidential content to atrributes without encryption or it be exposed to font-end.
 
 ```json
 {
