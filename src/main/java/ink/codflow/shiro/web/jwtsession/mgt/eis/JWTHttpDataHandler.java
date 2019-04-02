@@ -13,7 +13,7 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
     private JWTSourceAdaptor source;
     // JWTToken stored in Cookie as Default
     private boolean sessionJwtTokenCookieEnabled = true;
-
+    private long globalSessionTimeout = 18000;
     JWTHttpDataHandler(JWTSourceAdaptor source) {
         this.source = source;
     }
@@ -99,7 +99,7 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
     protected boolean store2Cookie(String value) {
         SimpleCookie cookie = new SimpleCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
         cookie.setHttpOnly(true); // more secure, protects against XSS attacks
-
+        cookie.setMaxAge((int)getGlobalSessionTimeout());
         cookie.setValue(value);
         if (WebUtils.isHttp(source)) {
             HttpServletRequest request = WebUtils.getHttpRequest(source);
@@ -117,5 +117,16 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
     public void setSessionJwtTokenCookieEnabled(boolean sessionJwtTokenCookieEnabled) {
         this.sessionJwtTokenCookieEnabled = sessionJwtTokenCookieEnabled;
     }
+
+    public void setglobalSessionTimeout(long globalSessionTimeout) {
+        this.globalSessionTimeout = globalSessionTimeout;
+        
+    }
+
+    public long getGlobalSessionTimeout() {
+        return globalSessionTimeout;
+    }
+    
+    
 
 }

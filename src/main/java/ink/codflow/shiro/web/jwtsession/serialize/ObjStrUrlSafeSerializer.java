@@ -39,25 +39,5 @@ public class ObjStrUrlSafeSerializer implements ObjStrSerializer<Object> {
 
     }
 
-    /*
-     * @Override public Object str2ObjDeserialize(String objectBase64Str) { String
-     * objStr = Base64.decodeToString(objectBase64Str); Object valueObject = null;
-     * ByteArrayInputStream input = new ByteArrayInputStream(objStr.getBytes()); try
-     * { ObjectInputStream objectIn = new ObjectInputStream(input); valueObject=
-     * objectIn.readObject(); objectIn.close(); input.close(); } catch (Exception e)
-     * { e.printStackTrace(); } return valueObject; }
-     * 
-     * @Override public String obj2StrSerialize(Object obj) { ByteArrayOutputStream
-     * output = new ByteArrayOutputStream(); ObjectOutputStream objectOut; try {
-     * objectOut = new ObjectOutputStream(output); objectOut.writeObject(obj);
-     * objectOut.close(); output.close(); } catch (IOException e) {
-     * 
-     * e.printStackTrace(); } // Prevent special character String objectBase64Str =
-     * Base64.encodeToString(output.toByteArray());
-     * 
-     * return objectBase64Str;
-     * 
-     * }
-     * 
-     */
+
 }

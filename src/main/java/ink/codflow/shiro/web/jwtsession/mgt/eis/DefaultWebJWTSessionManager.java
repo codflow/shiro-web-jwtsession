@@ -107,7 +107,7 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
 
         if (ThreadDataUtil.isRequestSourceEmpty()) {
             ThreadDataUtil.setDataSourceToThread(pairSource);
-            ThreadDataUtil.getDataSourceFromThread().setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled);
+            ThreadDataUtil.getDataSourceFromThread().setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled,getGlobalSessionTimeout() );
         }
     }
 

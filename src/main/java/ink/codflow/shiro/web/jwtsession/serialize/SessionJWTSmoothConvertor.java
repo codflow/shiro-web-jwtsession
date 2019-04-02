@@ -12,7 +12,9 @@ import ink.codflow.shiro.web.jwtsession.mgt.JWTSession;
 import ink.codflow.shiro.web.jwtsession.mgt.UnSafeRawList;
 
 public class SessionJWTSmoothConvertor extends SessionJWTConvertor {
-
+    public SessionJWTSmoothConvertor() {
+    }
+    
     public SessionJWTSmoothConvertor(ObjStrSerializer<Object> serializer, Algorithm algorithm) {
         super(serializer, algorithm);
     }
@@ -43,11 +45,7 @@ public class SessionJWTSmoothConvertor extends SessionJWTConvertor {
     @Override
     protected Map<Object, Object> getSessionAttributes(SimpleSession session) {
         Map<Object, Object> atrributes = ((JWTSession)session).getRecoveredAttributes();
-//        Map<Object, UnSafeRawList> rawMap = ((JWTSession)session).getAttributesRawMap();
-//        if (rawMap != null && !rawMap.isEmpty()) {
-//            atrributes.putAll(rawMap);
-//        }
-//        
+       
         return atrributes;
     }
     
@@ -62,17 +60,6 @@ public class SessionJWTSmoothConvertor extends SessionJWTConvertor {
             Object keyObject = recoverKeyObject(atrrbuteKey, typeMask);
             session.setAttribute(keyObject, rawList);
         }
-
-//            Object valueRaw = list.get(ATTRIBUTE_VALUE_POSITION);
-//            int valueType = (typeMask >> 3) & ATTRIBUTES_KEY_RECOVER_MASK;
-//            valueObject = resolve2Obj(valueRaw, valueType);
-//            if (valueObject != null) {
-//                int keyType = typeMask & ATTRIBUTES_KEY_RECOVER_MASK;
-//                keyObject = resolve2Obj(atrrbuteKey, keyType);
-//                session.setAttribute(keyObject, valueObject);
-//            }
-//            
-
         return session;
     }
 }

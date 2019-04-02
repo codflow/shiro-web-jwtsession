@@ -31,9 +31,9 @@ public class JWTSessionDAO extends AbstractSessionDAO {
     private SessionFactory sessionFactory;
     private ObjStrSerializer<Object> serializer;
     private SessionJWTConvertor convertor;
+    private SessionJWTConvertor  uniniconvertor;
     
-    
-    private String JWT_SecretKey ;
+    private String JWT_SecretKey  ;
     private String salt = "d@gs3";
     private Algorithm algorithm;
 
@@ -43,7 +43,9 @@ public class JWTSessionDAO extends AbstractSessionDAO {
             return algorithm;
         }
         try {
-            return Algorithm.HMAC256(getJWT_SecretKey() + getSalt());
+            Algorithm algorithm0 = Algorithm.HMAC256(getJWT_SecretKey() + getSalt());
+            this.algorithm = algorithm0;
+            return this.algorithm;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -180,7 +182,7 @@ public class JWTSessionDAO extends AbstractSessionDAO {
     public String getJWT_SecretKey() {
         if (JWT_SecretKey ==null) {
             JWT_SecretKey = DRFAULTSECRETKEY;
-            String msg = "Encode with default algorithm :" + algorithm.getName() + "and key:" + DRFAULTSECRETKEY
+            String msg = "Encode with default and key:" + DRFAULTSECRETKEY
                     + "may cause security risks!";
             log.warn(msg);
         }
@@ -195,11 +197,16 @@ public class JWTSessionDAO extends AbstractSessionDAO {
         if (convertor != null) {
             return convertor;
         }
+        if (uniniconvertor != null) {
+            uniniconvertor.setAlgorithm(getAlgorithm());
+            uniniconvertor.setSerializer(getSerializer());
+            convertor = uniniconvertor;
+            return convertor;
+        }
         return new SessionJWTSmoothConvertor(getSerializer(), getAlgorithm());
     }
 
     public void setConvertor(SessionJWTConvertor convertor) {
-
-        this.convertor = convertor;
+        this.uniniconvertor = convertor;
     }
 }
