@@ -233,10 +233,10 @@ sessionManager.sessionValidationScheduler=$sessionValidationScheduler
 
 TBD
 
-## transfer with Http Header  
+## Be transfered with Http Header  
 
 JWT token is store in Cookie named "JWTTOKEN" by default.For transfering in header with out cookie, set the sessionJwtTokenCookieEnabled to false.  
-JWT token should be send back in header of http request. In addition, features like SSO need token stored data at font-end.
+JWT token should be sent in header with the name "JWTTOKEN" in http response. In addition, it must be stored data at font-end and sent back in header with the name "JWTTOKEN" of http request.
 ```ini
 [main]
 
