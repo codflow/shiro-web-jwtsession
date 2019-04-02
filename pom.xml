@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ink.codflow.shiro.jwtsession</groupId>
 	<artifactId>shiro-web-jwtsession</artifactId>
-	<version>0.2.1-alpha0</version>
+	<version>0.2.1-alpha1</version>
 	<name>shiro-web-jwtsession</name>
 	<!-- FIXME change it to the project's website -->
 	<url>github.com/codflow/shiro-web-jwtsession</url>
@@ -100,7 +100,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
+<!-- 					<plugin>
 						<groupId>org.sonatype.plugins</groupId>
 						<artifactId>nexus-staging-maven-plugin</artifactId>
 						<version>1.6.7</version>
@@ -108,9 +108,9 @@
 						<configuration>
 							<serverId>ossrh</serverId>
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<autoReleaseAfterClose>ture</autoReleaseAfterClose>
 						</configuration>
-					</plugin>
+					</plugin> -->
 
 				</plugins>
 			</build>
