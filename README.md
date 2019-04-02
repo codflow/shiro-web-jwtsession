@@ -148,7 +148,7 @@ WARNNING: Don't set confidential content to atrributes without encryption or it 
 }
 ```
 
-# Advanced Option
+# Advanced Options
 
 ## Set JWT secret 
 
@@ -157,7 +157,7 @@ WARNNING: Don't set confidential content to atrributes without encryption or it 
 
 [main]
 
-sessionDAO=ink.codflow.shiro.web.jwtsession.mgt.eis.PartialCacheJWTSessionDAO
+sessionDAO=ink.codflow.shiro.web.jwtsession.mgt.eis.JWTSessionDAO
 sessionDAO.JWT_SecretKey=abcd1234
 
 ```
@@ -171,8 +171,29 @@ sessionManager.globalSessionTimeout = 18000
 
 ```
 
+## Session Convertor
+Two classes of convertors are provided: 
 
-### Optionally Parital Cache 
+* SessionJWTConvertor :  
+  Eager mode.Decode and deserialize whole session token string immediately.
+
+* SessionJWTSmoothConvertor：
+  Lazy mode.Decode and deserialize session attribute values in need.
+
+```ini
+[main]
+
+#sessionDAO=ink.codflow.shiro.web.jwtsession.mgt.eis.JWTSessionDAO
+
+
+#sessionJWTConvertor = ink.codflow.shiro.web.jwtsession.serialize.SessionJWTConvertor
+sessionJWTConvertor = ink.codflow.shiro.web.jwtsession.serialize.SessionJWTSmoothConvertor
+
+sessionDAO.convertor = $sessionJWTConvertor 
+
+```
+
+## Parital Cache 
 Cache the info about session to management the session expiration at server side.
 It is recommened that Server cache the session id only.
 
@@ -210,7 +231,7 @@ sessionManager.sessionValidationScheduler=$sessionValidationScheduler
 
 TBD
 
-### Optionally transfer with Http Header  
+## transfer with Http Header  
 
 JWT token is store in Cookie named "JWTTOKEN" by default.For transfering in header with out cookie, set the sessionJwtTokenCookieEnabled to false.  
 JWT token should be send back in header of http request. In addition, features like SSO need token stored data at font-end.
