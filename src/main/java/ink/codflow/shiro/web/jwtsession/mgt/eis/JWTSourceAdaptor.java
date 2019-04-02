@@ -46,8 +46,10 @@ public class JWTSourceAdaptor implements RequestPairSource {
     public boolean isSessionJwtTokenCookieEnabled() {
         return handler.isSessionJwtTokenCookieEnabled();
     }
-    public void setSessionJwtTokenCookieEnabled(boolean sessionJwtTokenCookieEnabled) {
+    public void setSessionJwtTokenCookieEnabled(boolean sessionJwtTokenCookieEnabled,long globalSessionTimeout ) {
         handler.setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled);
+        handler.setglobalSessionTimeout(globalSessionTimeout);
     }
+    
     
 }
