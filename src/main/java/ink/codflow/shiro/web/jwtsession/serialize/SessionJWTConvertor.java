@@ -340,11 +340,8 @@ public class SessionJWTConvertor {
                 }
                 UnCheckedPutPlainObject(jwtBuilder, ATTRIBUTES_KEY, jwtAttributesMap);
             }
-
             return jwtBuilder;
         }
-
-
 
         private void UnCheckedPutPlainObject(Builder builder, String key, Object value) {
             Class<Builder> clazz = Builder.class;
