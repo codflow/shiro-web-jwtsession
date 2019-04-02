@@ -12,7 +12,9 @@ import ink.codflow.shiro.web.jwtsession.mgt.JWTSession;
 import ink.codflow.shiro.web.jwtsession.mgt.UnSafeRawList;
 
 public class SessionJWTSmoothConvertor extends SessionJWTConvertor {
-
+    public SessionJWTSmoothConvertor() {
+    }
+    
     public SessionJWTSmoothConvertor(ObjStrSerializer<Object> serializer, Algorithm algorithm) {
         super(serializer, algorithm);
     }
