@@ -1,7 +1,9 @@
 # shiro-web-jwtsession
 
+English |  [中文](https://github.com/codflow/shiro-web-jwtsession/blob/master/README_zh.md)
 ## Introduction
 A integration for storage of session in [JWT](https://jwt.io/)  support with  [Apache Shiro](http://shiro.apache.org)
+
 
 ## Adding and configuring 
 
@@ -239,6 +241,7 @@ JWT token should be send back in header of http request. In addition, features l
 [main]
 
 sessionJwtTokenCookieEnabled = false
+
 ```  
 
 
