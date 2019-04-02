@@ -1,7 +1,6 @@
 package ink.codflow.shiro.web.jwtsession.serialize;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,21 +44,7 @@ public class SessionJWTConvertor {
     private static final Logger log = LoggerFactory.getLogger(SessionJWTConvertor.class);
 
     public SessionJWTConvertor() {
-        String salt = "7dh&uP";
-        String JWT_SECRET = "mdefaultsecret";
-        String secret_Key = salt + JWT_SECRET;
-        try {
-            this.algorithm = Algorithm.HMAC256(secret_Key);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
 
-            e.printStackTrace();
-        }
-        this.serializer = new ObjStrUrlSafeSerializer();
-        String msg = "Encode with default algorithm :" + algorithm.getName() + "and key:" + JWT_SECRET
-                + "may cause security risks!";
-        log.warn(msg);
     }
 
     public SessionJWTConvertor(ObjStrSerializer<Object> serializer, Algorithm algorithm) {

@@ -7,15 +7,31 @@ import java.util.Date;
 import org.apache.shiro.session.mgt.SimpleSession;
 import org.junit.Test;
 
+import com.auth0.jwt.algorithms.Algorithm;
+
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSession;
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSessionFactory;
+import ink.codflow.shiro.web.jwtsession.serialize.ObjStrSerializer;
+import ink.codflow.shiro.web.jwtsession.serialize.ObjStrUrlSafeSerializer;
 import ink.codflow.shiro.web.jwtsession.serialize.SessionJWTConvertor;
 
 public class SessionJWTConvertorTest {
 
     @Test
     public void test() throws IllegalArgumentException, UnsupportedEncodingException {
-        SessionJWTConvertor convertor = new SessionJWTConvertor();
+        Algorithm algorithm = null;
+        String JWT_SECRET = "mdefaultsecret";
+        try {
+            algorithm = Algorithm.HMAC256(JWT_SECRET);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+
+            e.printStackTrace();
+        }
+        ObjStrSerializer<Object> serializer = new ObjStrUrlSafeSerializer();
+
+        SessionJWTConvertor convertor = new SessionJWTConvertor(serializer, algorithm);
         JWTSessionFactory factory = new JWTSessionFactory();
         JWTSession session = (JWTSession) factory.createSession();
 

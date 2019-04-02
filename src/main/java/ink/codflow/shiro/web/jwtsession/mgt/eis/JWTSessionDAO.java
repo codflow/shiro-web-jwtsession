@@ -31,7 +31,7 @@ public class JWTSessionDAO extends AbstractSessionDAO {
     private SessionFactory sessionFactory;
     private ObjStrSerializer<Object> serializer;
     private SessionJWTConvertor convertor;
-    
+    private SessionJWTConvertor  uniniconvertor;
     
     private String JWT_SecretKey  ;
     private String salt = "d@gs3";
@@ -197,11 +197,16 @@ public class JWTSessionDAO extends AbstractSessionDAO {
         if (convertor != null) {
             return convertor;
         }
+        if (uniniconvertor != null) {
+            uniniconvertor.setAlgorithm(getAlgorithm());
+            uniniconvertor.setSerializer(getSerializer());
+            convertor = uniniconvertor;
+            return convertor;
+        }
         return new SessionJWTSmoothConvertor(getSerializer(), getAlgorithm());
     }
 
     public void setConvertor(SessionJWTConvertor convertor) {
-
-        this.convertor = convertor;
+        this.uniniconvertor = convertor;
     }
 }
