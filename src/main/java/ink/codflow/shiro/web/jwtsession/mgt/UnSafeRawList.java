@@ -11,6 +11,5 @@ import java.util.List;
  *          list[@see SessionJWTConvertor#ATTRIBUTE_MASK_POSITION] :the type mask of key-value pair
  */
 public interface UnSafeRawList  extends List<Object>{
-
-   
+    
 }

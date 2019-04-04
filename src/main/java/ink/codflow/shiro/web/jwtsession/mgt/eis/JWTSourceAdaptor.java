@@ -2,6 +2,8 @@ package ink.codflow.shiro.web.jwtsession.mgt.eis;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
+import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.util.RequestPairSource;
 public class JWTSourceAdaptor implements RequestPairSource {
 
@@ -46,6 +48,10 @@ public class JWTSourceAdaptor implements RequestPairSource {
     public boolean isSessionJwtTokenCookieEnabled() {
         return handler.isSessionJwtTokenCookieEnabled();
     }
+    public void setSessionCookie(Cookie cookie) {
+        handler.setTemplateSessionCookie(cookie);
+    }
+    
     public void setSessionJwtTokenCookieEnabled(boolean sessionJwtTokenCookieEnabled,long globalSessionTimeout ) {
         handler.setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled);
         handler.setglobalSessionTimeout(globalSessionTimeout);

@@ -64,11 +64,6 @@ public class JWTSessionDAO extends AbstractSessionDAO {
 
     }
 
-    public JWTSessionDAO(boolean isSessionJwtTokenCookieEnabled)
-            throws IllegalArgumentException, UnsupportedEncodingException {
-        this.sessionFactory = new JWTSessionFactory();
-    }
-
     @Override
     public void update(Session session) throws UnknownSessionException {
         doUpdate(session);

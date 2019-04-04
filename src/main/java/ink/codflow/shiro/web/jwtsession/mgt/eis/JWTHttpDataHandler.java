@@ -1,6 +1,6 @@
 package ink.codflow.shiro.web.jwtsession.mgt.eis;
 
-import javax.servlet.http.Cookie;
+import org.apache.shiro.web.servlet.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -14,6 +14,8 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
     // JWTToken stored in Cookie as Default
     private boolean sessionJwtTokenCookieEnabled = true;
     private long globalSessionTimeout = 18000;
+    
+    private Cookie templatecookie;
     JWTHttpDataHandler(JWTSourceAdaptor source) {
         this.source = source;
     }
@@ -32,8 +34,7 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
     @Override
     public boolean deleteData() {
         this.JwtStrData = null;
-        SimpleCookie cookie = new SimpleCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
-
+        SimpleCookie cookie = (SimpleCookie) getTemplateSessionCookie();
         if (WebUtils.isHttp(source)) {
             HttpServletRequest request = WebUtils.getHttpRequest(source);
             HttpServletResponse response = WebUtils.getHttpResponse(source);
@@ -49,8 +50,15 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
     }
 
     public String readReferencedCookieData() {
-        Cookie cookie = getCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
-        return cookie != null ? cookie.getValue() : null;
+        
+        if (WebUtils.isHttp(source)) {
+            HttpServletRequest request = WebUtils.getHttpRequest(source);
+            HttpServletResponse response = WebUtils.getHttpResponse(source);
+            return getTemplateSessionCookie().readValue(request, response);
+        }
+        return null;
+        //Cookie cookie = getCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
+        //return cookie != null ? cookie.getValue() : null;
     }
 
     private boolean store2Header(String value) {
@@ -82,23 +90,25 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
         return null;
     }
 
-    protected Cookie getCookie(String key) {
-        if (WebUtils.isHttp(source)) {
-            Cookie[] cookies = WebUtils.getHttpRequest(source).getCookies();
-            if (cookies != null) {
-                for (javax.servlet.http.Cookie cookie : cookies) {
-                    if (cookie.getName().equals(key)) {
-                        return cookie;
-                    }
-                }
-            }
-        }
-        return null;
-    }
+//    protected Cookie getCookie(String key) {
+//        if (WebUtils.isHttp(source)) {
+//            Cookie[] cookies = WebUtils.getHttpRequest(source).getCookies();
+//            if (cookies != null) {
+//                for (javax.servlet.http.Cookie cookie : cookies) {
+//                    if (cookie.getName().equals(key)) {
+//                        return cookie;
+//                    }
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     protected boolean store2Cookie(String value) {
-        SimpleCookie cookie = new SimpleCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
+
+        SimpleCookie cookie = new SimpleCookie(getTemplateSessionCookie());
         cookie.setHttpOnly(true); // more secure, protects against XSS attacks
+        
         cookie.setMaxAge((int)getGlobalSessionTimeout());
         cookie.setValue(value);
         if (WebUtils.isHttp(source)) {
@@ -125,6 +135,18 @@ public class JWTHttpDataHandler implements JWTDataHandler<String> {
 
     public long getGlobalSessionTimeout() {
         return globalSessionTimeout;
+    }
+
+    public void setTemplateSessionCookie(Cookie cookie) {
+        this.templatecookie = cookie;
+    }
+    
+    public Cookie getTemplateSessionCookie() {
+        if (templatecookie == null) {
+            templatecookie = new SimpleCookie(DEFAULT_JWT_SESSION_COOKIE_NAME);
+        }
+        
+        return this.templatecookie;
     }
     
     

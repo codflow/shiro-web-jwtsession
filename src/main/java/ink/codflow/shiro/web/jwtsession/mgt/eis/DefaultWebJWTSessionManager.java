@@ -3,6 +3,7 @@ package ink.codflow.shiro.web.jwtsession.mgt.eis;
 import java.io.Serializable;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
@@ -10,6 +11,7 @@ import org.apache.shiro.session.mgt.DelegatingSession;
 import org.apache.shiro.session.mgt.SessionContext;
 import org.apache.shiro.session.mgt.SessionKey;
 import org.apache.shiro.util.StringUtils;
+import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.apache.shiro.web.session.mgt.WebSessionManager;
@@ -20,12 +22,14 @@ import org.slf4j.LoggerFactory;
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSessionFactory;
 import ink.codflow.shiro.web.jwtsession.util.ThreadDataUtil;
 
-public class DefaultWebJWTSessionManager extends DefaultSessionManager implements WebSessionManager {
+public class DefaultWebJWTSessionManager extends DefaultSessionManager implements WebSessionManager  {
     private static final Logger log = LoggerFactory.getLogger(DefaultWebJWTSessionManager.class);
     private static final boolean ENABLEJWTSESSIONCOOKIE = true;
     private static final boolean DISABLEURLREWRITE = false;
     private boolean sessionJwtTokenCookieEnabled;
     private boolean sessionIdUrlRewritingEnabled;
+    private boolean sessionIdCookieEnabled;
+    private Cookie sessionCookie;
 
     public DefaultWebJWTSessionManager() {
         try {
@@ -107,7 +111,7 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
 
         if (ThreadDataUtil.isRequestSourceEmpty()) {
             ThreadDataUtil.setDataSourceToThread(pairSource);
-            ThreadDataUtil.getDataSourceFromThread().setSessionJwtTokenCookieEnabled(sessionJwtTokenCookieEnabled,getGlobalSessionTimeout() );
+            ThreadDataUtil.getDataSourceFromThread().setSessionJwtTokenCookieEnabled(isSessionJwtTokenCookieEnabled(),getGlobalSessionTimeout() );
         }
     }
 
@@ -119,8 +123,7 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
         this.sessionIdUrlRewritingEnabled = sessionIdUrlRewritingEnabled;
     }
 
-    @SuppressWarnings("unused")
-    private boolean isSessionJwtTokenCookieEnabled() {
+    public boolean isSessionJwtTokenCookieEnabled() {
         return sessionJwtTokenCookieEnabled;
     }
 
@@ -151,9 +154,22 @@ public class DefaultWebJWTSessionManager extends DefaultSessionManager implement
 
     }
 
+    public boolean isSessionIdCookieEnabled() {
+        return sessionIdCookieEnabled;
+    }
+
     @Override
     public void validateSessions() {
         validatePartialSessions();
+    }
+
+
+
+    public void setSessionCookie(Cookie sessionCookieTemplate) {
+        this.sessionCookie = sessionCookieTemplate;
+    }
+    public Cookie getSessionCookie() {
+        return sessionCookie;
     }
 
 }
