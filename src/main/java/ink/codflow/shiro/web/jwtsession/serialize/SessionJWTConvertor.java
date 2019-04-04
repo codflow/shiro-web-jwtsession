@@ -127,9 +127,10 @@ public class SessionJWTConvertor {
 
         } catch (JWTDecodeException exception) {
             log.info("jwtsession rec err", exception);
-        }catch (SignatureVerificationException exception1) {
-            String msg = "Verify fail";
-            log.warn(msg,exception1);
+        } catch (SignatureVerificationException exception1) {
+            StringBuilder sb = new StringBuilder("Verify fail, Token:");
+            String msg = sb.append(tokenStr).toString();
+            log.warn(msg);
             return null;
         }
         return session;

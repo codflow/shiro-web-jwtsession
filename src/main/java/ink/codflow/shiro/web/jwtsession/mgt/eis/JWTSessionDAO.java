@@ -130,7 +130,12 @@ public class JWTSessionDAO extends AbstractSessionDAO {
 
     private SimpleSession read(SimpleSession plainSession) {
         String tokenStr = ThreadDataUtil.getDataSourceFromThread().readData();
-        return getConvertorLazy().tokenStr2Session(tokenStr, plainSession);
+        SimpleSession session = getConvertorLazy().tokenStr2Session(tokenStr, plainSession);
+        if (session != null) {
+            return session;
+        }
+        ThreadDataUtil.getDataSourceFromThread().deleteData();
+        return session;
     }
 
     @SuppressWarnings("unused")
