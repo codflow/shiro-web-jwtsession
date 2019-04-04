@@ -33,7 +33,7 @@ public class JWTSession extends SimpleSession implements Cloneable {
         for (Entry<Object, UnSafeRawList> attributePair : attributesRawMap.entrySet()) {
             UnSafeRawList valueList = attributePair.getValue();
             Object valueObject = convertor.recoverValueObject(valueList);
-            super.setAttribute(attributePair.getKey(), valueObject);
+            setRealAttribute(attributePair.getKey(), valueObject);
             attributesRawMap.remove(attributePair.getKey());
         }
     }
@@ -57,11 +57,19 @@ public class JWTSession extends SimpleSession implements Cloneable {
     public UnSafeRawList getAttributeRaw(Object key) {
         return getAttributesRawMap().get(key);
     }
+    protected Object removeRawAttribute(Object key) {
+        Map<Object, UnSafeRawList> attributes = getAttributesRawMap();
+        if (attributes == null) {
+            return null;
+        } else {
+            return (Object)attributes.remove(key);
+        }
+    }
 
     @Override
     public Object getAttribute(Object key) {
 
-        Object value = super.getAttribute(key);
+        Object value = getRealAttribute(key);
         if (value == null && getAttributesRawMap().containsKey(key)) {
             List<Object> valueList = getAttributesRawMap().get(key);
             value = getConvertor().recoverValueObject(valueList);
@@ -72,32 +80,42 @@ public class JWTSession extends SimpleSession implements Cloneable {
     
     @Override
     public Collection<Object> getAttributeKeys() throws InvalidSessionException {
-        Collection<Object> c = super.getAttributeKeys();
+        
+        Map<Object, Object> attributes = getRealAttributes();
         Collection<Object> raw = getAttributesRawMap().keySet();
-        raw.addAll(c);
+        if (attributes != null) {
+            Collection<Object> c = attributes.keySet();
+            raw.addAll(c);
+        }
         return raw;
     }
     
     
-    public Map<Object, Object> getRecoveredAttributes() {
-        return super.getAttributes();
-    }
     
     @Override
     public Map<Object, Object> getAttributes() {
         if (attributesRawMap!=null && !getAttributesRawMap().isEmpty()) {
             recoverRaw();
         }
-        return super.getAttributes();
+        return getRealAttributesLazy();
     }
+    public Object removeAttribute(Object key) {
 
+        getAttribute(key);
+        Map<Object, Object> attributes = getRealAttributes();
+        if (attributes == null) {
+            return null;
+        } else {
+            return attributes.remove(key);
+        }
+    }
     @Override
     public void setAttribute(Object key, Object value) {
         if (key instanceof Serializable && value instanceof Serializable) {
             if (attributesRawMap!=null && getAttributesRawMap().containsKey(key)) {
                 getAttributesRawMap().remove(key);
             }
-            super.setAttribute(key, value);
+            setRealAttribute(key, value);
         } else {
             String msg = "In order for the Serializer to serialize this attribute, class" + key.getClass().getName()
                     + "or" + value.getClass().getName() + "must implement java.io.Serializable.";
@@ -105,6 +123,59 @@ public class JWTSession extends SimpleSession implements Cloneable {
         }
     }
 
+
+    public void setAttributes(Map<Object, Object> attributes) {
+        if (this.attributesRawMap != null) {
+            this.attributesRawMap.clear();
+        }
+        
+        super.setAttributes(attributes);  
+    }
+
+
+    protected Object getRealAttribute(Object key) {
+        Map<Object, Object> attributes = super.getAttributes();
+        if (attributes == null) {
+            return null;
+        }
+        return attributes.get(key);
+    }
+    public Object removeRealAttribute(Object key) {
+        
+        Map<Object, Object> attributes = super.getAttributes();
+        if (attributes == null) {
+            return null;
+        } else {
+            return attributes.remove(key);
+        }
+    }
+    protected Map<Object, Object> getRealAttributesLazy() {
+        Map<Object, Object> attributes = super.getAttributes();
+        if (attributes == null) {
+            attributes = new HashMap<Object, Object>();
+            setRealAttributes(attributes);
+        }
+        return attributes;
+    }
+    
+    private void setRealAttributes(Map<Object, Object> attributes) {
+       super.setAttributes(attributes);
+        
+    }
+
+    protected void setRealAttribute(Object key, Object value) {
+        if (value == null) {
+            
+            removeRealAttribute(key);
+        } else {
+            getRealAttributesLazy().put(key, value);
+        }
+    }
+    
+
+    
+    
+    
     public SessionJWTSmoothConvertor getConvertor() {
         return convertor;
     }
@@ -122,5 +193,9 @@ public class JWTSession extends SimpleSession implements Cloneable {
             e.printStackTrace();
         }
         return cloned;
+    }
+
+    public Map<Object, Object> getRealAttributes() {
+        return super.getAttributes();
     }
 }

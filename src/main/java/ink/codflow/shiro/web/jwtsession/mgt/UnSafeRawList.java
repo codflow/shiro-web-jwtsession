@@ -1,6 +1,7 @@
 package ink.codflow.shiro.web.jwtsession.mgt;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * UnSafeRawList
@@ -10,6 +11,13 @@ import java.util.List;
  *          list[@see SessionJWTConvertor#ATTRIBUTE_VALUE_POSITION] :the serialized and encoded value string
  *          list[@see SessionJWTConvertor#ATTRIBUTE_MASK_POSITION] :the type mask of key-value pair
  */
-public interface UnSafeRawList  extends List<Object>{
-    
+public class UnSafeRawList  extends ArrayList<Object>{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4614493259385607626L;
+
+    public UnSafeRawList(Collection<? extends Object> c) {
+        super(c);
+    }
 }

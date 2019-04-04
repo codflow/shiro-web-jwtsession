@@ -16,6 +16,7 @@ import com.auth0.jwt.JWTCreator.Builder;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -126,6 +127,10 @@ public class SessionJWTConvertor {
 
         } catch (JWTDecodeException exception) {
             log.info("jwtsession rec err", exception);
+        }catch (SignatureVerificationException exception1) {
+            String msg = "Verify fail";
+            log.warn(msg,exception1);
+            return null;
         }
         return session;
     }

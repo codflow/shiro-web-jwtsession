@@ -24,7 +24,6 @@ import ink.codflow.shiro.web.jwtsession.serialize.SessionJWTSmoothConvertor;
 import ink.codflow.shiro.web.jwtsession.util.ThreadDataUtil;
 
 public class JWTSessionDAO extends AbstractSessionDAO {
-    @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(JWTSessionDAO.class);
     
     private static final String DRFAULTSECRETKEY = "defaultsecret";
