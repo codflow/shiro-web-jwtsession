@@ -20,35 +20,21 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-public class SessionJWTConvertor {
+public class DefaultSessionJWTConvertor extends AbstractSessionJWTConvertor {
 
     
-    private static final String ID_KEY = "jti";
-    private static final String START_TIMESTAMP_KEY = "st";
-    private static final String STOP_TIMESTAMP_KEY = "sp";
-    private static final String LAST_ACCESS_TIME_KEY = "la";
-    private static final String TIMEOUT_KEY = "to";
-    private static final String EXPIRED_KEY = "ex";
-    private static final String HOST_KEY = "ht";
-    private static final String ATTRIBUTES_KEY = "ats";
-
-    protected static final byte ATTRIBUTE_MASK_POSITION = 1;
-    protected static final byte ATTRIBUTE_VALUE_POSITION = 0;
-
-    protected static final byte ATTRIBUTES_KEY_RECOVER_MASK = 7;
-    // private static final byte ATTRIBUTES_VALUE_RECOVER_MASK = 56;
 
     
     private Algorithm algorithm;
     protected ObjStrSerializer<Object> serializer;
     private JWTVerifier verifier;
-    private static final Logger log = LoggerFactory.getLogger(SessionJWTConvertor.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultSessionJWTConvertor.class);
 
-    public SessionJWTConvertor() {
+    public DefaultSessionJWTConvertor() {
 
     }
 
-    public SessionJWTConvertor(ObjStrSerializer<Object> serializer, Algorithm algorithm) {
+    public DefaultSessionJWTConvertor(ObjStrSerializer<Object> serializer, Algorithm algorithm) {
         this.serializer = serializer;
         this.algorithm = algorithm;
     }
@@ -213,7 +199,7 @@ public class SessionJWTConvertor {
     }
 
 
-    public DecodedJWT createJWT(String tokenStr) {
+    protected DecodedJWT createJWT(String tokenStr) {
         if (this.verifier == null) {
             this.verifier = JWT.require(algorithm).build();
         }

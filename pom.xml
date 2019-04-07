@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ink.codflow.shiro.jwtsession</groupId>
 	<artifactId>shiro-web-jwtsession</artifactId>
-	<version>0.2.1-alpha2</version>
+	<version>0.2.1-alpha2-SNAPSHOT</version>
 	<name>shiro-web-jwtsession</name>
 	<!-- FIXME change it to the project's website -->
 	<url>github.com/codflow/shiro-web-jwtsession</url>

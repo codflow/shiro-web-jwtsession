@@ -12,7 +12,7 @@ import org.apache.shiro.session.mgt.SimpleSession;
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSession;
 import ink.codflow.shiro.web.jwtsession.mgt.UnSafeRawList;
 
-public class SessionJWTSmoothConvertor extends SessionJWTConvertor {
+public class SessionJWTSmoothConvertor extends DefaultSessionJWTConvertor {
     public SessionJWTSmoothConvertor() {
     }
     
