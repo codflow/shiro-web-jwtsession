@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSessionFactory;
 import ink.codflow.shiro.web.jwtsession.serialize.ObjStrSerializer;
 import ink.codflow.shiro.web.jwtsession.serialize.ObjStrUrlSafeSerializer;
-import ink.codflow.shiro.web.jwtsession.serialize.SessionJWTConvertor;
+import ink.codflow.shiro.web.jwtsession.serialize.DefaultSessionJWTConvertor;
 import ink.codflow.shiro.web.jwtsession.serialize.SessionJWTSmoothConvertor;
 import ink.codflow.shiro.web.jwtsession.util.ThreadDataUtil;
 
@@ -29,8 +29,8 @@ public class JWTSessionDAO extends AbstractSessionDAO {
     private static final String DRFAULTSECRETKEY = "defaultsecret";
     private SessionFactory sessionFactory;
     private ObjStrSerializer<Object> serializer;
-    private SessionJWTConvertor convertor;
-    private SessionJWTConvertor  uniniconvertor;
+    private DefaultSessionJWTConvertor convertor;
+    private DefaultSessionJWTConvertor  uniniconvertor;
     
     private String JWT_SecretKey  ;
     private String salt = "d@gs3";
@@ -192,7 +192,7 @@ public class JWTSessionDAO extends AbstractSessionDAO {
         JWT_SecretKey = jWT_SecretKey;
     }
 
-    public SessionJWTConvertor getConvertorLazy() {
+    public DefaultSessionJWTConvertor getConvertorLazy() {
         if (convertor != null) {
             return convertor;
         }
@@ -205,7 +205,7 @@ public class JWTSessionDAO extends AbstractSessionDAO {
         return new SessionJWTSmoothConvertor(getSerializer(), getAlgorithm());
     }
 
-    public void setConvertor(SessionJWTConvertor convertor) {
+    public void setConvertor(DefaultSessionJWTConvertor convertor) {
         this.uniniconvertor = convertor;
     }
 }

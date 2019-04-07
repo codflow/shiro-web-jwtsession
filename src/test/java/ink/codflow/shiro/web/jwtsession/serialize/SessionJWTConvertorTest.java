@@ -1,4 +1,4 @@
-package ink.codflow.shiro.jwtsession.serialize;
+package ink.codflow.shiro.web.jwtsession.serialize;
 
 import static org.junit.Assert.assertTrue;
 
@@ -13,7 +13,7 @@ import ink.codflow.shiro.web.jwtsession.mgt.JWTSession;
 import ink.codflow.shiro.web.jwtsession.mgt.JWTSessionFactory;
 import ink.codflow.shiro.web.jwtsession.serialize.ObjStrSerializer;
 import ink.codflow.shiro.web.jwtsession.serialize.ObjStrUrlSafeSerializer;
-import ink.codflow.shiro.web.jwtsession.serialize.SessionJWTConvertor;
+import ink.codflow.shiro.web.jwtsession.serialize.DefaultSessionJWTConvertor;
 
 public class SessionJWTConvertorTest {
 
@@ -31,7 +31,7 @@ public class SessionJWTConvertorTest {
         }
         ObjStrSerializer<Object> serializer = new ObjStrUrlSafeSerializer();
 
-        SessionJWTConvertor convertor = new SessionJWTConvertor(serializer, algorithm);
+        DefaultSessionJWTConvertor convertor = new DefaultSessionJWTConvertor(serializer, algorithm);
         JWTSessionFactory factory = new JWTSessionFactory();
         JWTSession session = (JWTSession) factory.createSession();
 
