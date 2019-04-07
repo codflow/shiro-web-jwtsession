@@ -195,7 +195,7 @@ sessionDAO.convertor = $sessionJWTConvertor
 
 ```
 
-## Parital Cache 
+## Partial Cache 
 Cache the info about session to management the session expiration at server side.
 It is recommened that Server cache the session id only.
 
