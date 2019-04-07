@@ -32,7 +32,7 @@ securityManager.sessionManager=$sessionManager
 就这样完成了! 
 会话session已经在服务器端实现了无状态化.查看浏览器,就会发先有个名为"JWTTOKEN"的cookie. 
 
-如果你的旧项目是权限验证时基于Shiro的，这**大概是最便捷** 将项目从服务器端session保持（在服务器内存或独立数据库中）迁移到无状态服务器(会话session储存在)的方式.
+如果你的旧项目是权限验证时基于Shiro的，这**大概是最便捷** 将项目从服务器端session保持（在服务器内存或独立数据库中）迁移到无状态服务器(会话session储存在签名的JWT令牌并在客户端保持)的方式.
 
 ## 格式
 

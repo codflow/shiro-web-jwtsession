@@ -127,10 +127,12 @@ public class SessionJWTConvertor {
 
         } catch (JWTDecodeException exception) {
             log.info("jwtsession rec err", exception);
+
         } catch (SignatureVerificationException exception1) {
             StringBuilder sb = new StringBuilder("Verify fail, Token:");
             String msg = sb.append(tokenStr).toString();
             log.warn(msg);
+
             return null;
         }
         return session;
@@ -346,11 +348,8 @@ public class SessionJWTConvertor {
                 }
                 UnCheckedPutPlainObject(jwtBuilder, ATTRIBUTES_KEY, jwtAttributesMap);
             }
-
             return jwtBuilder;
         }
-
-
 
         private void UnCheckedPutPlainObject(Builder builder, String key, Object value) {
             Class<Builder> clazz = Builder.class;
