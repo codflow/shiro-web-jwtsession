@@ -25,7 +25,6 @@ public class ThreadDataUtil {
         if (WebUtils.isHttp(context)) {
             setDataSourceToThread((RequestPairSource) context);
         }
-
     }
 
     public static void setDataSourceToThread(RequestPairSource source) {
