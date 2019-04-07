@@ -127,8 +127,12 @@ public class SessionJWTConvertor {
 
         } catch (JWTDecodeException exception) {
             log.info("jwtsession rec err", exception);
-        }catch (SignatureVerificationException exception) {
-            log.warn("The Token's Signature resulted invalid when verified using the Algorithm: HmacSHA256", exception);
+
+        } catch (SignatureVerificationException exception1) {
+            StringBuilder sb = new StringBuilder("Verify fail, Token:");
+            String msg = sb.append(tokenStr).toString();
+            log.warn(msg);
+
             return null;
         }
         return session;

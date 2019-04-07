@@ -24,7 +24,6 @@ import ink.codflow.shiro.web.jwtsession.serialize.SessionJWTSmoothConvertor;
 import ink.codflow.shiro.web.jwtsession.util.ThreadDataUtil;
 
 public class JWTSessionDAO extends AbstractSessionDAO {
-    @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(JWTSessionDAO.class);
     
     private static final String DRFAULTSECRETKEY = "defaultsecret";
@@ -62,11 +61,6 @@ public class JWTSessionDAO extends AbstractSessionDAO {
     public JWTSessionDAO() {
         this.sessionFactory = new JWTSessionFactory();
 
-    }
-
-    public JWTSessionDAO(boolean isSessionJwtTokenCookieEnabled)
-            throws IllegalArgumentException, UnsupportedEncodingException {
-        this.sessionFactory = new JWTSessionFactory();
     }
 
     @Override
@@ -136,7 +130,12 @@ public class JWTSessionDAO extends AbstractSessionDAO {
 
     private SimpleSession read(SimpleSession plainSession) {
         String tokenStr = ThreadDataUtil.getDataSourceFromThread().readData();
-        return getConvertorLazy().tokenStr2Session(tokenStr, plainSession);
+        SimpleSession session = getConvertorLazy().tokenStr2Session(tokenStr, plainSession);
+        if (session != null) {
+            return session;
+        }
+        ThreadDataUtil.getDataSourceFromThread().deleteData();
+        return session;
     }
 
     @SuppressWarnings("unused")

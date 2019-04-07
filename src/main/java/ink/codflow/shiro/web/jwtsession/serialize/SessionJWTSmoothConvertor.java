@@ -1,6 +1,7 @@
 package ink.codflow.shiro.web.jwtsession.serialize;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -44,9 +45,14 @@ public class SessionJWTSmoothConvertor extends SessionJWTConvertor {
     }
     @Override
     protected Map<Object, Object> getSessionAttributes(SimpleSession session) {
-        Map<Object, Object> atrributes = ((JWTSession)session).getRecoveredAttributes();
+        Map<Object, Object> atrributes = ((JWTSession)session).getAttributes();
        
         return atrributes;
+    }
+    
+    public SimpleSession tokenStr2Session(String tokenStr, SimpleSession session) {
+        ((JWTSession)session).setConvertor(this);
+        return super.tokenStr2Session( tokenStr, session);
     }
     
     @Override
@@ -55,11 +61,14 @@ public class SessionJWTSmoothConvertor extends SessionJWTConvertor {
         
         for (String atrrbuteKey : valueMap.keySet()) {
             
-            UnSafeRawList rawList = (UnSafeRawList) valueMap.get(atrrbuteKey);
+            @SuppressWarnings("unchecked")//get pair 
+            UnSafeRawList rawList = new UnSafeRawList( (Collection<? extends Object>) valueMap.get(atrrbuteKey)) ;
             byte typeMask = ((Integer) rawList.get(ATTRIBUTE_MASK_POSITION)).byteValue();
             Object keyObject = recoverKeyObject(atrrbuteKey, typeMask);
-            session.setAttribute(keyObject, rawList);
+            ((JWTSession)session).setAttributeRaw(keyObject, rawList);
         }
         return session;
     }
+    
+    
 }
